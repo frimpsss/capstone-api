@@ -4,19 +4,20 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { corsOptions } from "./utils/config";
 import { HttpStatusCode } from "./utils/globalTypes";
-
+import { router as PostNotificationRouter } from "./push-notifs/routes";
 dotenv.config();
 
 const app = express();
 const port = parseInt(process.env.PORT as string, 10) || 9090;
+
 app.use(
   express.json(),
-  express.urlencoded({ extended: true }),
-  bodyParser.json()
+  bodyParser.json(),
+  express.urlencoded({ extended: true })
 );
 
 app.use(cors(corsOptions));
-
+app.use("/api", PostNotificationRouter);
 app.all("/", (req: Request, res: Response) => {
   return res.status(HttpStatusCode.Ok).send("Welcome to aquatrack api");
 });
