@@ -11,7 +11,7 @@ export interface IUSER extends Document {
   name: string;
   password: string;
   email: string;
-  meterId: ObjectId;
+  meterId?: ObjectId;
   isVerified: boolean;
   phoneNumber: string;
 }

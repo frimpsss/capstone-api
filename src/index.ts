@@ -1,12 +1,13 @@
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { checkRequiredEnvVars, corsOptions } from "./utils/config";
+import { checkRequiredEnvVars, corsOptions, getLocalIP } from "./utils/config";
 import { HttpStatusCode } from "./utils/globalTypes";
 import { router as PostNotificationRouter } from "./push-notifs/routes";
 import { router as AdminRouter } from "./auth/admin/routes";
 import { router as MeterRouter } from "./meters/routes";
 import { router as UserRouter } from "./auth/user/routes";
+import { router as NotificationRouter } from "./notifications/routes";
 import mongoose from "mongoose";
 import { connectDB } from "./utils/dbCon";
 import { verifyToken } from "./middleware/verify.middleware";
@@ -30,6 +31,7 @@ app.use("/api", PostNotificationRouter);
 app.use("/admin/auth", AdminRouter);
 app.use("/user/auth", UserRouter);
 app.use("/api/meter", verifyToken, MeterRouter);
+app.use("/api/notification", verifyToken, NotificationRouter);
 
 app.all("/", (_req: Request, res: Response) => {
   return res.status(HttpStatusCode.Ok).send("Welcome to aquatrack api");
@@ -45,7 +47,9 @@ app.all("*", (_req: Request, res: Response, _next: NextFunction) => {
 connectDB()
   .then(() => {
     app.listen(port, () => {
-      console.log(`Server up and spinning on port: ${port}`);
+      console.log(
+        `Server up and spinning on port: http://${getLocalIP()}:${port}`
+      );
     });
   })
   .catch((error: any) => {

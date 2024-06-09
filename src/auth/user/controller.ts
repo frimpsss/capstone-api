@@ -60,6 +60,7 @@ export class UserAuthController {
         saved
       );
     } catch (error: unknown | any) {
+      console.log(error);
       if (error instanceof ZodError) {
         return new CustomResponse(
           HttpStatusCode.BadRequest,
@@ -115,9 +116,18 @@ export class UserAuthController {
           null
         );
       }
+      if (!foundUser.isVerified) {
+        return new CustomResponse(
+          HttpStatusCode.BadRequest,
+          "Account not verified",
+          true,
+          null
+        );
+      }
       const token = createAccessToken({
         userId: foundUser._id as string,
       });
+
       return new CustomResponse(
         HttpStatusCode.Ok,
         "Log in succesfull",
@@ -125,6 +135,7 @@ export class UserAuthController {
         token
       );
     } catch (error: unknown | any) {
+      console.log(error);
       if (error instanceof ZodError) {
         return new CustomResponse(
           HttpStatusCode.BadRequest,
