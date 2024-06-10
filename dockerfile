@@ -1,9 +1,10 @@
 FROM node:alpine
 
-ARG DB_URL=unknown
+
 ARG AT_S=unknown
-ENV DATABASE_URL=$DB_URL
 ENV ACCESS_TOKEN_SECRET=$AT_S
+ENV DATABASE_URL=$DB_URL
+ARG DB_URL=unknown
 
 WORKDIR /
 COPY package*.json ./
