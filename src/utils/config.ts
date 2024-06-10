@@ -25,7 +25,7 @@ interface globalConfig {
 }
 
 export const GlobalConfig: globalConfig = {
-  DB_URL: process.env.DB_URL ?? "",
+  DB_URL: process.env.DATABASE_URL ?? "",
   ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET ?? "",
 };
 

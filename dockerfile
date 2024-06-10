@@ -1,7 +1,7 @@
 FROM node:alpine
 
-ARG DB_U=unknown
-ENV DB_URL=$DB_U
+ARG DB_URL=unknown
+ENV DATABASE_URL=$DB_URL
 ARG AT_S=unknown
 ENV ACCESS_TOKEN_SECRET=$AT_S
 
