@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for aquatrack-api on 2024-06-10T18:03:56Z
+# fly.toml app configuration file generated for aquatrack on 2024-06-10T18:14:35Z
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'aquatrack-api'
+app = 'aquatrack'
 primary_region = 'lhr'
 
 [build]
