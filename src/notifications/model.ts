@@ -15,8 +15,12 @@ const NotificationSchema = new Schema<INotification>(
       ref: "User",
     },
     notificationType: {
-      type: String,
-      enum: Object.values(NotificationType),
+      type: SchemaTypes.String,
+      enum: NotificationType,
+      required: true,
+    },
+    message: {
+      type: SchemaTypes.String,
       required: true,
     },
   },
