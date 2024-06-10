@@ -15,10 +15,10 @@ import { verifyToken } from "./middleware/verify.middleware";
 dotenv.config();
 
 // Ensure required environment variables are set
-checkRequiredEnvVars().catch((error: any) => {
-  console.error(error?.message);
-  return;
-});
+// checkRequiredEnvVars().catch((error: any) => {
+//   console.error(error?.message);
+//   return;
+// });
 
 const app = express();
 const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 9090;
