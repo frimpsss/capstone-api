@@ -3,7 +3,6 @@ import { loginValidator, registerValidator } from "../utils";
 import { AdminModel, UserModel } from "../model";
 import {
   createAccessToken,
-  findAppUserByEmail,
   findAppUserByID,
   findUserByEmail,
   hashPassword,

@@ -1,7 +1,8 @@
 import { CorsOptions } from "cors";
 import mongoose from "mongoose";
+import os from "os";
 import dotenv from "dotenv";
-const whiteList = ["http://localhost:3000"];
+const whiteList = ["http://localhost:3000", "*"];
 
 export const corsOptions: CorsOptions = {
   origin(requestOrigin, callback) {
@@ -42,4 +43,20 @@ export function castToObjectId(id: string): mongoose.Types.ObjectId {
   } else {
     throw new Error(`Invalid ObjectId: ${id}`);
   }
+}
+
+export function getLocalIP() {
+  const interfaces: any = os.networkInterfaces();
+  const addresses = [];
+
+  for (const name of Object.keys(interfaces)) {
+    for (const net of interfaces[name]) {
+      // Skip over non-IPv4 and internal (i.e., 127.0.0.1) addresses
+      if (net.family === "IPv4" && !net.internal) {
+        addresses.push(net.address);
+      }
+    }
+  }
+
+  return addresses.length ? addresses[0] : null;
 }

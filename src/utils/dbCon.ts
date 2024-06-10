@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { GlobalConfig, checkRequiredEnvVars } from "./config";
+
 export async function connectDB() {
   try {
     await checkRequiredEnvVars();

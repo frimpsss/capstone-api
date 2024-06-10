@@ -38,7 +38,7 @@ export function createAccessToken({
   role,
 }: {
   userId: string;
-  role: ROLE;
+  role?: ROLE;
 }) {
   return jwt.sign({ userId, role }, GlobalConfig.ACCESS_TOKEN_SECRET, {
     expiresIn: "15d",

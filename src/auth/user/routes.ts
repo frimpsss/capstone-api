@@ -12,3 +12,11 @@ router.post("/register", async (req: Request, res: Response) => {
   });
   res.status(response.statusCode).send(response);
 });
+
+router.post("/login", async (req: Request, res: Response) => {
+  const response = await Controller.login({
+    email: req.body.email,
+    password: req.body.password,
+  });
+  res.status(response.statusCode).send(response);
+});

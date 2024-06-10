@@ -43,6 +43,7 @@ const UserSchema = new Schema<IUSER>(
     meterId: {
       type: SchemaTypes.ObjectId,
       ref: "Meter",
+      required: false,
     },
     isVerified: {
       type: SchemaTypes.Boolean,
