@@ -19,7 +19,7 @@ jobs:
       - name: Deploy with flyctl
         run: |
           flyctl deploy --remote-only \
-            --build-arg DB_U=${{ secrets.DATABASE_URL }} \
+            --build-arg DB_U=${{ secrets.DB_URL }} \
             --build-arg AT_S=${{ secrets.ACCESS_TOKEN_SECRET }} \
             --build-arg RT_S=${{ secrets.REFRESH_TOKEN_SECRET }} \
             --build-arg E_T=${{ secrets.ENCRYPTION_TOKEN }} 
