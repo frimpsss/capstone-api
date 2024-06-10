@@ -12,11 +12,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Install Fly CLI
-        uses: superfly/flyctl-actions/install-flyctl@v1
-      - name: Login to Fly
-        run: flyctl login -t ${{ secrets.FLY_API_TOKEN }}
-      - name: Deploy with Build Arguments
+
+      - name: Setup flyctl
+        uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Deploy with flyctl
         run: |
           flyctl deploy --remote-only \
             --build-arg DB_URL=${{ secrets.DATABASE_URL }} \
