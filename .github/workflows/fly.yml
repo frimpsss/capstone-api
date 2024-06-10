@@ -15,7 +15,12 @@ jobs:
 
       - name: Setup flyctl
         uses: superfly/flyctl-actions/setup-flyctl@master
-
+        
+      - name: Verify secrets
+        run: |
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}"
+          echo "ACCESS_TOKEN_SECRET=${{ secrets.ACCESS_TOKEN_SECRET }}"
+          echo "FLY_API_TOKEN=${{ secrets.FLY_API_TOKEN }}" | sha256sum
       - name: Deploy with flyctl
         run: |
           flyctl deploy --remote-only \
