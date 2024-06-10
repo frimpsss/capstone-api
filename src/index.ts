@@ -37,6 +37,10 @@ app.all("/", (_req: Request, res: Response) => {
   return res.status(HttpStatusCode.Ok).send("Welcome to aquatrack api");
 });
 
+app.all("/ping", (_req: Request, res: Response) => {
+  return res.status(HttpStatusCode.Ok).send("pong");
+});
+
 app.all("*", (_req: Request, res: Response, _next: NextFunction) => {
   return res.status(HttpStatusCode.NotFound).send({
     status: false,
