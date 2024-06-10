@@ -25,5 +25,3 @@ jobs:
             --build-arg E_T=${{ secrets.ENCRYPTION_TOKEN }} 
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-
-
