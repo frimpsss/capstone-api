@@ -2,7 +2,12 @@ import { CorsOptions } from "cors";
 import mongoose from "mongoose";
 import os from "os";
 import dotenv from "dotenv";
-const whiteList = ["http://localhost:3000", "*", "http://localhost:5173"];
+const whiteList = [
+  "http://localhost:3000",
+  "*",
+  "http://localhost:5173",
+  "https://water-web-green.vercel.app",
+];
 
 export const corsOptions: CorsOptions = {
   origin(requestOrigin, callback) {
