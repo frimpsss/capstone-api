@@ -17,14 +17,15 @@ router.post("/register", async (req: Request, res: Response) => {
   res.status(response.statusCode).send(response);
 });
 router.post("/login", async (req: Request, res: Response) => {
-  console.table({
-    email: req.body?.email,
-    password: req.body?.password,
-  });
   const response = await Controller.login({
     email: req.body?.email,
     password: req.body?.password,
   });
+  res.status(response.statusCode).send(response);
+});
+
+router.get("/details", verifyToken, async (req, res) => {
+  const response = await Controller.getAdminInfo(req.body.userId);
   res.status(response.statusCode).send(response);
 });
 

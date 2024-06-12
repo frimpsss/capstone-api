@@ -5,6 +5,7 @@ import {
   createAccessToken,
   findAppUserByID,
   findUserByEmail,
+  findUserByID,
   hashPassword,
   isCorrectPassword,
 } from "../services";
@@ -183,6 +184,53 @@ export class AdminAuthController {
           error
         );
       }
+      if (error instanceof MongooseError) {
+        return new CustomResponse(
+          HttpStatusCode.BadRequest,
+          "Mongoose Error",
+          false,
+          error
+        );
+      }
+
+      return new CustomResponse(
+        HttpStatusCode.InternalServerError,
+        undefined,
+        false,
+        Error(error?.message)
+      );
+    }
+  }
+
+  /**
+   * getAdminInfo
+   */
+  public async getAdminInfo(userId: string) {
+    try {
+      if (userId.trim() == "") {
+        return new CustomResponse(
+          HttpStatusCode.BadRequest,
+          "Bad request",
+          false
+        );
+      }
+
+      const foundUser = await AdminModel.findOne({ _id: userId }).select([
+        "email",
+        "name",
+        "role",
+      ]);
+
+      if (!foundUser) {
+        return new CustomResponse(
+          HttpStatusCode.BadRequest,
+          "No user found",
+          false
+        );
+      }
+
+      return new CustomResponse(HttpStatusCode.Ok, "Retrived", true, foundUser);
+    } catch (error: unknown | any) {
       if (error instanceof MongooseError) {
         return new CustomResponse(
           HttpStatusCode.BadRequest,
