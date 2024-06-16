@@ -1,5 +1,5 @@
 import mongoose, { Schema, SchemaTypes } from "mongoose";
-import { IAdmin, IUSER, ROLE } from "./types";
+import { IAdmin, IUSER, ROLE, verificationStage } from "./types";
 
 const AdminSchema = new Schema<IAdmin>(
   {
@@ -52,6 +52,11 @@ const UserSchema = new Schema<IUSER>(
     phoneNumber: {
       type: SchemaTypes.String,
       required: true,
+    },
+    verificationStage: {
+      type: SchemaTypes.String,
+      default: verificationStage.PENDING,
+      enum: verificationStage,
     },
   },
   { timestamps: true }

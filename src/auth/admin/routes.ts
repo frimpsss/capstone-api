@@ -34,7 +34,7 @@ router.patch(
   verifyToken,
   async (req: Request, res: Response) => {
     if (req.body.role == ROLE.ADMIN || req.body.role == ROLE.SUPER_ADMIN) {
-      const response = await Controller.verifyRegisterdUser(req.body.id);
+      const response = await Controller.verifyRegisterdUser(req.body.id, req.body.status);
       res.status(response.statusCode).send(response);
 
       return;

@@ -9,4 +9,5 @@ export interface INotification extends Document {
 export enum NotificationType {
   INDIVIDUAL = "INDIVIDUAL",
   GENERAL = "GENERAL",
+  ALL = 'ALL'
 }

@@ -14,8 +14,14 @@ export interface IUSER extends Document {
   meterId?: ObjectId;
   isVerified: boolean;
   phoneNumber: string;
+  verificationStage: verificationStage;
 }
 export enum ROLE {
   ADMIN = "ADMIN",
   SUPER_ADMIN = "SUPER_ADMIN",
+}
+
+export enum verificationStage {
+  PENDING = "PENDING",
+  VERIFIED = "VERIFIED",
 }

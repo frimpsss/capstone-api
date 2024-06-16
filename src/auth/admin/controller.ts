@@ -1,4 +1,4 @@
-import { IAdmin, ROLE } from "../types";
+import { IAdmin, ROLE, verificationStage } from "../types";
 import { loginValidator, registerValidator } from "../utils";
 import { AdminModel, UserModel } from "../model";
 import {
@@ -156,7 +156,8 @@ export class AdminAuthController {
    * verifyRegisterdUser
  :  */
   public async verifyRegisterdUser(
-    userId: string
+    userId: string,
+    status: boolean
   ): Promise<CustomResponse<any>> {
     try {
       const foundUser = await findAppUserByID(userId);
@@ -170,7 +171,7 @@ export class AdminAuthController {
       if (!foundUser.isVerified) {
         await UserModel.findOneAndUpdate(
           { _id: castToObjectId(userId) },
-          { isVerified: true }
+          { isVerified: status, verificationStage: verificationStage.VERIFIED }
         );
       }
 

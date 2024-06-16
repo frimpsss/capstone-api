@@ -114,12 +114,18 @@ export class NotificationController {
       }
 
       const notifs = await NotificationModel.find({
-        notificationType: NotificationType.INDIVIDUAL,
-        reciepientId: castToObjectId(userId),
-      });
+        $or: [
+          { notificationType: NotificationType.GENERAL },
+          {
+            notificationType: NotificationType.INDIVIDUAL,
+            recipientId: castToObjectId(userId),
+          },
+        ],
+      }).sort({ createdAt: "ascending" });
+
       return new CustomResponse(
         HttpStatusCode.Ok,
-        "All notifs be that",
+        "All notifications retrieved",
         true,
         notifs
       );
