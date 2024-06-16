@@ -115,9 +115,12 @@ export class NotificationController {
 
       const notifs = await NotificationModel.find({
         $or: [
-          { notificationType: NotificationType.GENERAL },
           {
-            notificationType: NotificationType.INDIVIDUAL,
+            notificationType: {
+              $in: [NotificationType.INDIVIDUAL, NotificationType.GENERAL],
+            },
+          },
+          {
             recipientId: castToObjectId(userId),
           },
         ],
