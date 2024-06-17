@@ -171,7 +171,7 @@ export class UserAuthController {
         userId,
       });
       const foundUser = await UserModel.findById(userId)
-        .select(["email", "name", "phoneNumber", "meterId"])
+        .select(["email", "name", "phoneNumber", "meterId", "createdAt"])
         .populate({
           path: "meterId",
           select: ["gpsAddress", "createdAt"],
