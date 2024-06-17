@@ -7,6 +7,7 @@ const whiteList = [
   "*",
   "http://localhost:5173",
   "https://water-web-green.vercel.app",
+  "https://water-dz78vte9r-vfk7.vercel.app"
 ];
 
 export const corsOptions: CorsOptions = {
