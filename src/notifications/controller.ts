@@ -124,7 +124,7 @@ export class NotificationController {
             recipientId: castToObjectId(userId),
           },
         ],
-      }).sort({ createdAt: "ascending" });
+      }).sort({ createdAt: "descending" });
 
       return new CustomResponse(
         HttpStatusCode.Ok,

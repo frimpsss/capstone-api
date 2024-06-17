@@ -8,7 +8,7 @@ import CustomResponse from "../../utils/wrapper";
 import { HttpStatusCode } from "../../utils/globalTypes";
 import { ZodError } from "zod";
 import { MongooseError } from "mongoose";
-import { loginValidator, userRegisterValidator } from "../utils";
+import { loginValidator, string, userRegisterValidator } from "../utils";
 import { UserModel } from "../model";
 import { IUSER } from "../types";
 
@@ -133,6 +133,63 @@ export class UserAuthController {
         "Log in succesfull",
         true,
         token
+      );
+    } catch (error: unknown | any) {
+      console.log(error);
+      if (error instanceof ZodError) {
+        return new CustomResponse(
+          HttpStatusCode.BadRequest,
+          "Validation error",
+          false,
+          error
+        );
+      }
+      if (error instanceof MongooseError) {
+        return new CustomResponse(
+          HttpStatusCode.BadRequest,
+          "Mongoose Error",
+          false,
+          error
+        );
+      }
+
+      return new CustomResponse(
+        HttpStatusCode.InternalServerError,
+        undefined,
+        false,
+        Error(error?.message)
+      );
+    }
+  }
+
+  /**
+   * getUserDetails
+   */
+  public async getUserDetails(userId: string): Promise<CustomResponse<any>> {
+    try {
+      string.parse({
+        userId,
+      });
+      const foundUser = await UserModel.findById(userId)
+        .select(["email", "name", "phoneNumber", "meterId"])
+        .populate({
+          path: "meterId",
+          select: ["gpsAddress", "createdAt"],
+        });
+      if (!foundUser) {
+        return new CustomResponse(
+          HttpStatusCode.BadRequest,
+          "Email or Password may be wrong",
+          true,
+          null
+        );
+      }
+
+      return new CustomResponse(
+        HttpStatusCode.Ok,
+        "User details retrieved",
+        true,
+        foundUser
       );
     } catch (error: unknown | any) {
       console.log(error);

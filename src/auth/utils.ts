@@ -11,10 +11,13 @@ export const loginValidator = z.object({
   password: z.string(),
 });
 
-
 export const userRegisterValidator = z.object({
   name: z.string(),
   email: z.string().email(),
   password: z.string(),
   phoneNumber: z.string(),
+});
+
+export const string = z.object({
+  userId: z.string(),
 });
