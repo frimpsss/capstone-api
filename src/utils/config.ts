@@ -4,10 +4,9 @@ import os from "os";
 import dotenv from "dotenv";
 const whiteList = [
   "http://localhost:3000",
-  "*",
   "http://localhost:5173",
   "https://water-web-green.vercel.app",
-  "https://water-dz78vte9r-vfk7.vercel.app"
+  "https://water-web-beryl.vercel.app"
 ];
 
 export const corsOptions: CorsOptions = {
