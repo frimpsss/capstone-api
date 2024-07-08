@@ -34,7 +34,10 @@ router.patch(
   verifyToken,
   async (req: Request, res: Response) => {
     if (req.body.role == ROLE.ADMIN || req.body.role == ROLE.SUPER_ADMIN) {
-      const response = await Controller.verifyRegisterdUser(req.body.id, req.body.status);
+      const response = await Controller.verifyRegisterdUser(
+        req.body.id,
+        req.body.status
+      );
       res.status(response.statusCode).send(response);
 
       return;
@@ -51,3 +54,18 @@ router.patch(
       );
   }
 );
+
+router.get("/all-users", verifyToken, async (req: Request, res: Response) => {
+  if (req.body.role == ROLE.ADMIN || req.body.role == ROLE.SUPER_ADMIN) {
+    const response = await Controller.getAllUsers();
+    res.status(response.statusCode).send(response);
+
+    return;
+  }
+
+  return res
+    .status(HttpStatusCode.Forbidden)
+    .send(
+      new CustomResponse(HttpStatusCode.Forbidden, "Cannot perform task", false)
+    );
+});

@@ -26,3 +26,4 @@ router.get("/details", verifyToken, async (req: Request, res: Response) => {
   const response = await Controller.getUserDetails(req.body.userId);
   res.status(response.statusCode).send(response);
 });
+

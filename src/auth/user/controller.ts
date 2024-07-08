@@ -26,7 +26,7 @@ export class UserAuthController {
     phoneNumber: string;
     name: string;
     password: string;
-  }): Promise<CustomResponse<Error | IUSER>> {
+  }): Promise<CustomResponse<Error | IUSER | string>> {
     try {
       userRegisterValidator.parse({
         email,
@@ -80,9 +80,9 @@ export class UserAuthController {
 
       return new CustomResponse(
         HttpStatusCode.InternalServerError,
-        undefined,
+        "An error occured",
         false,
-        Error(error?.message)
+        JSON.stringify(error)
       );
     }
   }
@@ -155,9 +155,9 @@ export class UserAuthController {
 
       return new CustomResponse(
         HttpStatusCode.InternalServerError,
-        undefined,
+        "An error occured",
         false,
-        Error(error?.message)
+        JSON.stringify(error)
       );
     }
   }
@@ -212,9 +212,9 @@ export class UserAuthController {
 
       return new CustomResponse(
         HttpStatusCode.InternalServerError,
-        undefined,
+        "An error occured",
         false,
-        Error(error?.message)
+        JSON.stringify(error)
       );
     }
   }

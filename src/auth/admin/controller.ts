@@ -23,7 +23,7 @@ export class AdminAuthController {
     role: ROLE = ROLE.ADMIN,
     password: string,
     email: string
-  ): Promise<CustomResponse<Error | IAdmin>> {
+  ): Promise<CustomResponse<string | IAdmin | Error>> {
     try {
       registerValidator.parse({
         name,
@@ -75,9 +75,9 @@ export class AdminAuthController {
 
       return new CustomResponse(
         HttpStatusCode.InternalServerError,
-        undefined,
+        "An error occured",
         false,
-        Error(error?.message)
+        JSON.stringify(error)
       );
     }
   }
@@ -146,9 +146,9 @@ export class AdminAuthController {
 
       return new CustomResponse(
         HttpStatusCode.InternalServerError,
-        undefined,
+        "An error occured",
         false,
-        Error(error?.message)
+        JSON.stringify(error)
       );
     }
   }
@@ -196,9 +196,9 @@ export class AdminAuthController {
 
       return new CustomResponse(
         HttpStatusCode.InternalServerError,
-        undefined,
+        "An error occured",
         false,
-        Error(error?.message)
+        JSON.stringify(error)
       );
     }
   }
@@ -232,6 +232,38 @@ export class AdminAuthController {
 
       return new CustomResponse(HttpStatusCode.Ok, "Retrived", true, foundUser);
     } catch (error: unknown | any) {
+      if (error instanceof MongooseError) {
+        return new CustomResponse(
+          HttpStatusCode.BadRequest,
+          "Mongoose Error",
+          false,
+          error
+        );
+      }
+
+      return new CustomResponse(
+        HttpStatusCode.InternalServerError,
+        "An error occured",
+        false,
+        JSON.stringify(error)
+      );
+    }
+  }
+  /**
+   * getAllUsers
+   */
+  public async getAllUsers(): Promise<CustomResponse<any>> {
+    try {
+      const all_users = await UserModel.find().populate("meterId");
+      return new CustomResponse(
+        HttpStatusCode.Ok,
+        "Users retrieved",
+        true,
+        all_users
+      );
+    } catch (error: unknown | any) {
+      console.log(error);
+
       if (error instanceof MongooseError) {
         return new CustomResponse(
           HttpStatusCode.BadRequest,

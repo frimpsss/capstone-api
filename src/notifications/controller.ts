@@ -77,11 +77,11 @@ export class NotificationController {
         );
       }
 
-      return new CustomResponse(
+            return new CustomResponse(
         HttpStatusCode.InternalServerError,
-        undefined,
+        "An error occured",
         false,
-        Error(error?.message)
+        JSON.stringify(error)
       );
     }
   }
@@ -151,11 +151,11 @@ export class NotificationController {
         );
       }
 
-      return new CustomResponse(
+            return new CustomResponse(
         HttpStatusCode.InternalServerError,
-        undefined,
+        "An error occured",
         false,
-        Error(error?.message)
+        JSON.stringify(error)
       );
     }
   }

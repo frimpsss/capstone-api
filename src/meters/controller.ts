@@ -89,11 +89,11 @@ export class MeterController {
         );
       }
 
-      return new CustomResponse(
+            return new CustomResponse(
         HttpStatusCode.InternalServerError,
-        undefined,
+        "An error occured",
         false,
-        Error(error?.message)
+        JSON.stringify(error)
       );
     } finally {
       await session.endSession();
@@ -145,11 +145,11 @@ export class MeterController {
         );
       }
 
-      return new CustomResponse(
+            return new CustomResponse(
         HttpStatusCode.InternalServerError,
-        undefined,
+        "An error occured",
         false,
-        Error(error?.message)
+        JSON.stringify(error)
       );
     }
   }
