@@ -25,4 +25,5 @@ export enum ROLE {
 export enum verificationStage {
   PENDING = "PENDING",
   VERIFIED = "VERIFIED",
+  REJECTD = "REJECTED",
 }

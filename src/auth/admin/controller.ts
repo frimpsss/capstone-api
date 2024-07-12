@@ -168,10 +168,15 @@ export class AdminAuthController {
           false
         );
       }
-      if (!foundUser.isVerified) {
+      if (!foundUser.verificationStage) {
         await UserModel.findOneAndUpdate(
           { _id: castToObjectId(userId) },
-          { isVerified: status, verificationStage: verificationStage.VERIFIED }
+          {
+            isVerified: status,
+            verificationStage: status
+              ? verificationStage.VERIFIED
+              : verificationStage.REJECTD,
+          }
         );
       }
 
