@@ -6,7 +6,7 @@ const whiteList = [
   "http://localhost:3000",
   "http://localhost:5173",
   "https://water-web-green.vercel.app",
-  "https://water-web-beryl.vercel.app"
+  "https://water-web-beryl.vercel.app",
 ];
 
 export const corsOptions: CorsOptions = {
@@ -27,11 +27,13 @@ dotenv.config();
 interface globalConfig {
   DB_URL: string;
   ACCESS_TOKEN_SECRET: string;
+  EXPO_ACCESS_TOKEN: string;
 }
 
 export const GlobalConfig: globalConfig = {
   DB_URL: process.env.DATABASE_URL ?? "",
   ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET ?? "",
+  EXPO_ACCESS_TOKEN: process.env.EXPO_ACCESS_TOKEN ?? "",
 };
 
 export async function checkRequiredEnvVars() {

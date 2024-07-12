@@ -1,6 +1,5 @@
 import { child, get, ref } from "firebase/database";
 import { dbRef, db } from "../push-notifs/service";
-import { any } from "zod";
 export const monthNames: string[] = [
   "Jan",
   "Feb",
@@ -28,18 +27,19 @@ export async function getMonthlyTotalConsumtionSortedByMeterIds(
       return {};
     }
 
-    const startDateInMs = startDate.getTime();
-    const endDateInMs = endDate.getTime();
+    const startDateInMs = Math.floor(startDate.getTime() / 1000);
+    const endDateInMs = Math.floor(endDate.getTime() / 1000);
 
     const meterIdAndTotal: { [meterId: string]: number } = {};
 
     Object.keys(data).forEach((meterId) => {
       let totalConsumption = 0;
       Object.values(data[meterId]).forEach((reading: any) => {
-        const timeStamp = reading?.timeStamp;
-
-        if (timeStamp && timeStamp < endDateInMs && timeStamp > startDateInMs) {
-          totalConsumption += Number(reading?.value) || 0;
+        const timeStamp = Number(reading?.timeStamp);
+        if (timeStamp) {
+          if (timeStamp >= startDateInMs && timeStamp <= endDateInMs) {
+            totalConsumption += Number(reading?.value) || 0;
+          }
         }
       });
 

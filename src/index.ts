@@ -13,7 +13,6 @@ import { router as BillRouter } from "./billing/routes";
 import mongoose from "mongoose";
 import { connectDB } from "./utils/dbCon";
 import { verifyToken } from "./middleware/verify.middleware";
-import { getMonthlyTotalConsumtionSortedByMeterIds } from "./utils/helper";
 
 dotenv.config();
 
@@ -30,7 +29,7 @@ app.use(express.json(), express.urlencoded({ extended: true }));
 
 app.use(cors(corsOptions));
 
-app.use("/api", PostNotificationRouter);
+app.use("/api/push", PostNotificationRouter);
 app.use("/admin/auth", AdminRouter);
 app.use("/user/auth", UserRouter);
 app.use("/api/meter", verifyToken, MeterRouter);

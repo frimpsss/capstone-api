@@ -1,4 +1,3 @@
-import { UserModel } from "../auth/model";
 import { HttpStatusCode } from "../utils/globalTypes";
 import CustomResponse from "../utils/wrapper";
 import { MongooseError } from "mongoose";
@@ -38,10 +37,10 @@ export class BillController {
       const PRICE_PER_LITTER = 0.077;
       const consumptions = (await getMonthlyTotalConsumtionSortedByMeterIds(
         new Date(billingPeriodStart),
-        new Date(billingPeriodStart)
+        new Date(billingPeriodEnd)
       )) as any;
 
-      console.log(consumptions);
+
       const meters = await MeterModel.find();
       if (!meters) {
         return new CustomResponse(

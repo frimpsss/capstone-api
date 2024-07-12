@@ -58,6 +58,10 @@ const UserSchema = new Schema<IUSER>(
       default: verificationStage.PENDING,
       enum: verificationStage,
     },
+    pushToken: {
+      required: false,
+      type: SchemaTypes.String,
+    },
   },
   { timestamps: true }
 );

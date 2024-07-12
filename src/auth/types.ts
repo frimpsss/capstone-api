@@ -15,6 +15,7 @@ export interface IUSER extends Document {
   isVerified: boolean;
   phoneNumber: string;
   verificationStage: verificationStage;
+  pushToken?: string;
 }
 export enum ROLE {
   ADMIN = "ADMIN",
