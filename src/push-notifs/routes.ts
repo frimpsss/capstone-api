@@ -38,6 +38,18 @@ router.post(
   "/register-token",
   verifyToken,
   async (req: Request, res: Response) => {
+    if (req.body.role == ROLE.ADMIN || req.body.role == ROLE.SUPER_ADMIN) {
+      return res
+        .status(HttpStatusCode.Forbidden)
+        .send(
+          new CustomResponse(
+            HttpStatusCode.Forbidden,
+            "Cannot perform task",
+            false
+          )
+        );
+    }
+
     const response = await MessagingController.registerPushToken(
       req.body.userId,
       req.body.token
