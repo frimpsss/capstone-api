@@ -16,9 +16,11 @@ export class MeterController {
   public async createMeter({
     userId,
     gpsAddress,
+    meterType,
   }: {
     userId: string;
     gpsAddress: string;
+    meterType: string;
   }): Promise<CustomResponse<any>> {
     const session = await mongoose.startSession();
     try {
@@ -27,6 +29,7 @@ export class MeterController {
       createMeterValidator.parse({
         userId,
         gpsAddress,
+        meterType,
       });
       const foundUser = await findAppUserByID(userId);
       if (!foundUser) {

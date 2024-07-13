@@ -1,5 +1,5 @@
 import mongoose, { Schema, SchemaTypes } from "mongoose";
-import { IMeter } from "./type";
+import { IMeter, IMeterType } from "./type";
 
 const MeterSchema = new Schema<IMeter>(
   {
@@ -11,6 +11,11 @@ const MeterSchema = new Schema<IMeter>(
     },
     gpsAddress: {
       type: SchemaTypes.String,
+      required: true,
+    },
+    meterType: {
+      type: SchemaTypes.String,
+      enum: IMeterType,
       required: true,
     },
   },
