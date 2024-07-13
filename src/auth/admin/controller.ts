@@ -168,17 +168,15 @@ export class AdminAuthController {
           false
         );
       }
-      if (!foundUser.verificationStage) {
-        await UserModel.findOneAndUpdate(
-          { _id: castToObjectId(userId) },
-          {
-            isVerified: status,
-            verificationStage: status
-              ? verificationStage.VERIFIED
-              : verificationStage.REJECTD,
-          }
-        );
-      }
+      await UserModel.findOneAndUpdate(
+        { _id: castToObjectId(userId) },
+        {
+          isVerified: status,
+          verificationStage: status
+            ? verificationStage.VERIFIED
+            : verificationStage.REJECTD,
+        }
+      );
 
       return new CustomResponse(HttpStatusCode.Ok, "User Verified", true);
     } catch (error: unknown | any) {
