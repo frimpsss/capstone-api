@@ -6,6 +6,6 @@ export interface IMeter extends Document {
 }
 
 export enum IMeterType {
-  RESIDENTIAL = "RESEDENTIAL",
+  RESIDENTIAL = "RESIDENTIAL",
   INDUSTRIAL = "INDUSTRIAL",
 }
