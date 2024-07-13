@@ -56,6 +56,7 @@ export class MeterController {
       const newMeter = new MeterModel({
         gpsAddress,
         userId: castToObjectId(userId),
+        meterType
       });
 
       const saved = await newMeter.save();
