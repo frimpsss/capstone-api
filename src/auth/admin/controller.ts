@@ -168,6 +168,13 @@ export class AdminAuthController {
           false
         );
       }
+      if (foundUser.verificationStage != verificationStage.PENDING) {
+        return new CustomResponse(
+          HttpStatusCode.BadRequest,
+          "User already verified",
+          false
+        );
+      }
       await UserModel.findOneAndUpdate(
         { _id: castToObjectId(userId) },
         {

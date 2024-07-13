@@ -7,6 +7,7 @@ import mongoose, { MongooseError } from "mongoose";
 import { castToObjectId } from "../utils/config";
 import { findAppUserByID } from "../auth/services";
 import { UserModel } from "../auth/model";
+import { verificationStage } from "../auth/types";
 
 export class MeterController {
   /**
@@ -35,7 +36,13 @@ export class MeterController {
           false
         );
       }
-
+      if (foundUser.verificationStage != verificationStage.VERIFIED) {
+        return new CustomResponse(
+          HttpStatusCode.BadRequest,
+          "User not verified",
+          false
+        );
+      }
       if (foundUser.meterId) {
         return new CustomResponse(
           HttpStatusCode.Conflict,
@@ -89,7 +96,7 @@ export class MeterController {
         );
       }
 
-            return new CustomResponse(
+      return new CustomResponse(
         HttpStatusCode.InternalServerError,
         "An error occured",
         false,
@@ -145,7 +152,7 @@ export class MeterController {
         );
       }
 
-            return new CustomResponse(
+      return new CustomResponse(
         HttpStatusCode.InternalServerError,
         "An error occured",
         false,
