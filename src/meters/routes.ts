@@ -12,6 +12,7 @@ router.post("/create", async (req: Request, res: Response) => {
     const response = await Controller.createMeter({
       userId: req.body.owner,
       gpsAddress: req.body.gpsAddress,
+      meterType: req.body.meterType,
     });
     res.status(response.statusCode).send(response);
 
