@@ -10,7 +10,7 @@ import { ZodError } from "zod";
 import { MongooseError } from "mongoose";
 import { loginValidator, string, userRegisterValidator } from "../utils";
 import { UserModel } from "../model";
-import { IUSER } from "../types";
+import { IUSER, verificationStage } from "../types";
 
 export class UserAuthController {
   /**
@@ -99,6 +99,7 @@ export class UserAuthController {
         password,
       });
       const foundUser = await findAppUserByEmail(email);
+
       if (!foundUser) {
         return new CustomResponse(
           HttpStatusCode.BadRequest,
@@ -116,7 +117,7 @@ export class UserAuthController {
           null
         );
       }
-      if (!foundUser.isVerified) {
+      if (foundUser.verificationStage != verificationStage.VERIFIED) {
         return new CustomResponse(
           HttpStatusCode.BadRequest,
           "Account not verified",
@@ -127,13 +128,16 @@ export class UserAuthController {
       const token = createAccessToken({
         userId: foundUser._id as string,
       });
-
-      return new CustomResponse(
-        HttpStatusCode.Ok,
-        "Log in succesfull",
-        true,
-        token
-      );
+      const details = await UserModel.findById(foundUser._id)
+        .select(["email", "name", "phoneNumber", "meterId", "createdAt"])
+        .populate({
+          path: "meterId",
+          select: ["gpsAddress", "createdAt"],
+        });
+      return new CustomResponse(HttpStatusCode.Ok, "Log in succesfull", true, {
+        token,
+        details,
+      });
     } catch (error: unknown | any) {
       console.log(error);
       if (error instanceof ZodError) {
