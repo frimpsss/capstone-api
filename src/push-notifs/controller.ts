@@ -27,7 +27,7 @@ export class PostNotification {
       //   },
       // };
 
-      await expo.sendPushNotificationsAsync([
+      const r = await expo.sendPushNotificationsAsync([
         {
           to: foundUser?.pushToken as string,
           title: title,
@@ -35,7 +35,12 @@ export class PostNotification {
         },
       ]);
 
-      return new CustomResponse(HttpStatusCode.Ok, "Message sent", true);
+      return new CustomResponse(
+        HttpStatusCode.Ok,
+        "Message will be sent",
+        true,
+        JSON.stringify(r)
+      );
     } catch (error: any) {
       console.error(error);
       return new CustomResponse(
@@ -51,7 +56,7 @@ export class PostNotification {
     token: string
   ): Promise<CustomResponse<any>> {
     try {
-      if (userId.trim() == "" || token.trim() == "") {
+      if (userId.trim() == "" || token?.trim() == "") {
         return new CustomResponse(
           HttpStatusCode.BadRequest,
           "Pass token or userId",

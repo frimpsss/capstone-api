@@ -24,7 +24,6 @@ export async function saveToken(userId: string, token: string) {
 
     console.log(t);
   } catch (error: unknown) {
-    // console.log(error)
     throw new Error("An error occured");
   }
 }
@@ -32,5 +31,5 @@ import { Expo } from "expo-server-sdk";
 import { GlobalConfig } from "../utils/config";
 export const expo = new Expo({
   accessToken: GlobalConfig.EXPO_ACCESS_TOKEN,
-  useFcmV1: false, // this can be set to true in order to use the FCM v1 API
+  useFcmV1: true, 
 });
