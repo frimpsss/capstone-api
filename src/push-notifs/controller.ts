@@ -19,14 +19,6 @@ export class PostNotification {
           false
         );
       }
-      // const msg = {
-      //   token: foundUser?._id as string,
-      //   notification: {
-      //     title,
-      //     body,
-      //   },
-      // };
-
       const r = await expo.sendPushNotificationsAsync([
         {
           to: foundUser?.pushToken as string,
