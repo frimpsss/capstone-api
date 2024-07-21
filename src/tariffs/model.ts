@@ -1,5 +1,32 @@
 import mongoose, { Schema, SchemaTypes } from "mongoose";
-import { ITariff, TariffStatus } from "./type";
+import {
+  ITariff,
+  IUPDATE,
+  RATE_CHANGE_TYPE,
+  STATUS_CHANGE_TYPE,
+  TariffStatus,
+} from "./type";
+const RateChangeSchema = new Schema<RATE_CHANGE_TYPE>({
+  oldRate: { type: SchemaTypes.Number, required: true },
+  newRate: { type: SchemaTypes.Number, required: true },
+  effectiveFrom: { type: SchemaTypes.Date, required: true },
+  effectiveTo: { type: SchemaTypes.Date, required: true },
+  date: { type: SchemaTypes.Date, required: true },
+});
+
+const StatusChangeSchema = new Schema<STATUS_CHANGE_TYPE>({
+  oldStatus: { type: SchemaTypes.Boolean, required: true },
+  newStatus: { type: SchemaTypes.Boolean, required: true },
+  date: { type: SchemaTypes.Date, required: true },
+});
+
+const UpdateSchema = new Schema<IUPDATE>({
+  type: { type: String, enum: ["rate", "status"], required: true },
+  updates: {
+    type: SchemaTypes.Mixed,
+    required: true,
+  },
+});
 
 const TariffSchema = new Schema<ITariff>(
   {
@@ -28,6 +55,11 @@ const TariffSchema = new Schema<ITariff>(
       type: SchemaTypes.String,
       required: true,
       enum: TariffStatus,
+    },
+    updateHistory: {
+      type: [UpdateSchema],
+      default: [],
+      required: false,
     },
   },
   { timestamps: true }
