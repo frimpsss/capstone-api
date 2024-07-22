@@ -55,6 +55,33 @@ router.patch("/toggle", verifyToken, async (req: Request, res: Response) => {
       new CustomResponse(HttpStatusCode.Forbidden, "Cannot perform task", false)
     );
 });
+router.patch(
+  "/change-rate",
+  verifyToken,
+  async (req: Request, res: Response) => {
+    if (req.body.role == ROLE.ADMIN || req.body.role == ROLE.SUPER_ADMIN) {
+      const response = await Controller.updateTarrif({
+        data: {
+          effectiveTo: req.body.effectiveTo,
+          newRate: req.body.newRate,
+        },
+        tariffId: req.body.tariffId,
+      });
+
+      return res.status(response.statusCode).send(response);
+    }
+
+    return res
+      .status(HttpStatusCode.Forbidden)
+      .send(
+        new CustomResponse(
+          HttpStatusCode.Forbidden,
+          "Cannot perform task",
+          false
+        )
+      );
+  }
+);
 
 router.get("/tariffs", verifyToken, async (req: Request, res: Response) => {
   if (req.body.role == ROLE.ADMIN || req.body.role == ROLE.SUPER_ADMIN) {

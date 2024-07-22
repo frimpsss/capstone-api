@@ -6,7 +6,7 @@ import {
   STATUS_CHANGE_TYPE,
   TariffStatus,
 } from "./type";
-const RateChangeSchema = new Schema<RATE_CHANGE_TYPE>({
+export const RateChangeSchema = new Schema<RATE_CHANGE_TYPE>({
   oldRate: { type: SchemaTypes.Number, required: true },
   newRate: { type: SchemaTypes.Number, required: true },
   effectiveFrom: { type: SchemaTypes.Date, required: true },
@@ -14,9 +14,9 @@ const RateChangeSchema = new Schema<RATE_CHANGE_TYPE>({
   date: { type: SchemaTypes.Date, required: true },
 });
 
-const StatusChangeSchema = new Schema<STATUS_CHANGE_TYPE>({
-  oldStatus: { type: SchemaTypes.Boolean, required: true },
-  newStatus: { type: SchemaTypes.Boolean, required: true },
+export const StatusChangeSchema = new Schema<STATUS_CHANGE_TYPE>({
+  oldStatus: { type: SchemaTypes.String, required: true, enum: TariffStatus },
+  newStatus: { type: SchemaTypes.String, required: true, enum: TariffStatus },
   date: { type: SchemaTypes.Date, required: true },
 });
 

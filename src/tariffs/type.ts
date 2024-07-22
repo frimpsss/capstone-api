@@ -10,8 +10,8 @@ export interface RATE_CHANGE_TYPE {
 }
 
 export interface STATUS_CHANGE_TYPE {
-  oldStatus: boolean;
-  newStatus: boolean;
+  oldStatus: TariffStatus;
+  newStatus: TariffStatus;
   date: Date;
 }
 export interface IUPDATE {
