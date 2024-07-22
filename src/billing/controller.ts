@@ -138,7 +138,12 @@ export class BillController {
         );
       }
 
-      const userBills = await BillModel.find({ meterId: foundUser?.meterId });
+      const userBills = await BillModel.find({
+        meterId: foundUser?.meterId,
+      }).populate({
+        path: "tariffs.tariffId",
+        select: ["name"],
+      });
 
       return new CustomResponse(
         HttpStatusCode.Ok,
