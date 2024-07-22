@@ -14,6 +14,7 @@ import {
 import { createBillValidator } from "./utils";
 import { BillStatus } from "./types";
 import { MeterModel } from "../meters/model";
+import { UserModel } from "../auth/model";
 
 const Tariffs = new TariffController();
 const Notifs = new NotificationController();
@@ -40,7 +41,6 @@ export class BillController {
         new Date(billingPeriodEnd)
       )) as any;
 
-
       const meters = await MeterModel.find();
       if (!meters) {
         return new CustomResponse(
@@ -51,9 +51,12 @@ export class BillController {
       }
       const currentTarrifs =
         (await Tariffs.getActiveTariffs()) as CustomResponse<ITariff[]>;
+
+      console.log(currentTarrifs);
       const tariffs = currentTarrifs.data?.map((e) => {
         return {
           tariffId: e._id,
+          rate: e?.rate,
         };
       });
 
@@ -64,7 +67,7 @@ export class BillController {
         let MONTHLY_CONSUMPTION = Number(consumptions?.[meter?._id]) || 0;
         let amountDue = MONTHLY_CONSUMPTION * PRICE_PER_LITTER;
         currentTarrifs.data?.map((e: ITariff, i) => {
-          amountDue += e.rate * (PRICE_PER_LITTER * 239);
+          amountDue += e.rate * 0.01 * MONTHLY_CONSUMPTION;
         });
 
         const newBill = new BillModel({
@@ -88,6 +91,60 @@ export class BillController {
         HttpStatusCode.Ok,
         "bills generated sucessfully",
         true
+      );
+    } catch (error: unknown | any) {
+      console.log(error);
+      if (error instanceof ZodError) {
+        return new CustomResponse(
+          HttpStatusCode.BadRequest,
+          "Validation error",
+          false,
+          error
+        );
+      }
+      if (error instanceof MongooseError) {
+        return new CustomResponse(
+          HttpStatusCode.BadRequest,
+          "Mongoose Error",
+          false,
+          error
+        );
+      }
+
+      return new CustomResponse(
+        HttpStatusCode.InternalServerError,
+        "An error occured",
+        false,
+        JSON.stringify(error)
+      );
+    }
+  }
+
+  /**
+   * getIndividialsBills
+{userId}:{userId: string}   */
+  public async getIndividialsBills({
+    userId,
+  }: {
+    userId: string;
+  }): Promise<CustomResponse<any>> {
+    try {
+      const foundUser = await UserModel.findOne({ _id: userId });
+      if (!foundUser) {
+        return new CustomResponse(
+          HttpStatusCode.BadRequest,
+          "User does not exist",
+          false
+        );
+      }
+
+      const userBills = await BillModel.find({ meterId: foundUser?.meterId });
+
+      return new CustomResponse(
+        HttpStatusCode.Ok,
+        "Bills retrieved succesfully",
+        true,
+        userBills
       );
     } catch (error: unknown | any) {
       console.log(error);

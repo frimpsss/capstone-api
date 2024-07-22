@@ -11,6 +11,7 @@ export interface IBill extends Document {
 }
 export interface IBillTariff {
   tariffId: string;
+  rate: number;
 }
 export enum BillStatus {
   FULLYPAID = "FULLY_PAID",

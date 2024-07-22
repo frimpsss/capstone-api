@@ -32,6 +32,10 @@ const BillSchema = new Schema<IBill>(
           ref: "Tariff",
           required: true,
         },
+        rate: {
+          type: SchemaTypes.Number,
+          required: true,
+        },
       },
     ],
   },

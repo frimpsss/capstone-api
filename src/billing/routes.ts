@@ -25,3 +25,19 @@ router.post("/generate", verifyToken, async (req, res) => {
       new CustomResponse(HttpStatusCode.Forbidden, "Cannot perform task", false)
     );
 });
+
+router.get("/user-bills", verifyToken, async (req, res) => {
+  if (req.body.role == ROLE.ADMIN || req.body.role == ROLE.SUPER_ADMIN) {
+    const response = await Controller.getIndividialsBills({
+      userId: req.body.user,
+    });
+    res.status(response.statusCode).send(response);
+
+    return;
+  }
+
+  const response = await Controller.getIndividialsBills({
+    userId: req.body.userId,
+  });
+  res.status(response.statusCode).send(response);
+});
