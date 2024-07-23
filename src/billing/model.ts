@@ -38,6 +38,11 @@ const BillSchema = new Schema<IBill>(
         },
       },
     ],
+    paymentId: {
+      type: SchemaTypes.ObjectId,
+      default: null,
+      required: false,
+    },
   },
   { timestamps: true }
 );
