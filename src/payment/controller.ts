@@ -124,7 +124,10 @@ export class PaymentController {
     userId: string;
   }): Promise<CustomResponse<any>> {
     try {
-      const txn = await PaymentModel.find({ userId });
+      const txn = await PaymentModel.find({ userId }).populate({
+        path: "billId",
+        select: ["billingPeriodStart", "amountDue"],
+      });
 
       return new CustomResponse(
         HttpStatusCode.Ok,
