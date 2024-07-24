@@ -126,7 +126,7 @@ export class PaymentController {
     try {
       const txn = await PaymentModel.find({ userId }).populate({
         path: "billId",
-        select: ["billingPeriodStart", "amountDue"],
+        select: ["billingPeriodStart", "totalAmountDue"],
       });
 
       return new CustomResponse(
