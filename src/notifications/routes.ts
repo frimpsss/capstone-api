@@ -36,6 +36,7 @@ router.get("/all-notification", async (_req: Request, _res: Response) => {
 
     return;
   }
+
   const response = await Controller.getAllNotifications({
     notificationType: _req.query["type"] as any,
     userId: _req.body.userId,

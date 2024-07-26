@@ -6,7 +6,6 @@ import { allNotifsPayloadSchema, newNotifSchema } from "./utils";
 import { MongooseError } from "mongoose";
 import { findAppUserByID } from "../auth/services";
 import { NotificationModel } from "./model";
-import { castToObjectId } from "../utils/config";
 
 export class NotificationController {
   /**
@@ -77,7 +76,7 @@ export class NotificationController {
         );
       }
 
-            return new CustomResponse(
+      return new CustomResponse(
         HttpStatusCode.InternalServerError,
         "An error occured",
         false,
@@ -121,7 +120,7 @@ export class NotificationController {
             },
           },
           {
-            recipientId: castToObjectId(userId),
+            recipientId: userId,
           },
         ],
       }).sort({ createdAt: "descending" });
@@ -151,7 +150,7 @@ export class NotificationController {
         );
       }
 
-            return new CustomResponse(
+      return new CustomResponse(
         HttpStatusCode.InternalServerError,
         "An error occured",
         false,
