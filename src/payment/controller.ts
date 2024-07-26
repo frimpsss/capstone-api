@@ -79,7 +79,13 @@ export class PaymentController {
    */
   public async getAllTxns(): Promise<CustomResponse<any>> {
     try {
-      const txn = await PaymentModel.find();
+      const txn = await PaymentModel.find()
+        .populate({
+          path: "billId",
+        })
+        .populate({
+          path: "userId",
+        });
 
       return new CustomResponse(
         HttpStatusCode.Ok,
