@@ -11,7 +11,11 @@ import {
   getMonthlyTotalConsumtionSortedByMeterIds,
   monthNames,
 } from "../utils/helper";
-import { createBillValidator } from "./utils";
+import {
+  billingMonthValidator,
+  createBillValidator,
+  returnFirstDateLastDate,
+} from "./utils";
 import { BillStatus } from "./types";
 import { MeterModel } from "../meters/model";
 import { UserModel } from "../auth/model";
@@ -23,18 +27,17 @@ export class BillController {
    * generateBills
    * supposed to be automated but for demo sake making it an endpoint
    */
-  public async generateBills({
-    billingPeriodStart,
-    billingPeriodEnd,
-  }: {
-    billingPeriodEnd: string;
-    billingPeriodStart: string;
-  }): Promise<CustomResponse<any>> {
+  public async generateBills(month: string): Promise<CustomResponse<any>> {
     try {
-      createBillValidator.parse({
-        billingPeriodEnd: new Date(billingPeriodStart),
-        billingPeriodStart: new Date(billingPeriodStart),
-      });
+      // createBillValidator.parse({
+      //   billingPeriodEnd: new Date(billingPeriodStart),
+      //   billingPeriodStart: new Date(billingPeriodStart),
+      // });
+
+      billingMonthValidator.parse(month);
+
+      const { firstDate: billingPeriodStart, lastDate: billingPeriodEnd } =
+        returnFirstDateLastDate(month);
       const PRICE_PER_LITTER = 0.077;
       const consumptions = (await getMonthlyTotalConsumtionSortedByMeterIds(
         new Date(billingPeriodStart),

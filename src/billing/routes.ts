@@ -10,10 +10,7 @@ const Controller = new BillController();
 
 router.post("/generate", verifyToken, async (req: Request, res: Response) => {
   if (req.body.role == ROLE.ADMIN || req.body.role == ROLE.SUPER_ADMIN) {
-    const response = await Controller.generateBills({
-      billingPeriodEnd: req.body.endDate,
-      billingPeriodStart: req.body.startDate,
-    });
+    const response = await Controller.generateBills(req.body.billingMonth);
     res.status(response.statusCode).send(response);
 
     return;
