@@ -5,7 +5,7 @@ import { NotificationType } from "./types";
 import { allNotifsPayloadSchema, newNotifSchema } from "./utils";
 import { MongooseError } from "mongoose";
 import { findAppUserByID } from "../auth/services";
-import { NotificationModel } from "./model";
+import { NotificationModel } from "./model"; 
 
 export class NotificationController {
   /**

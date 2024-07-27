@@ -5,4 +5,6 @@ export interface IReport extends Document {
   title: string;
   description: string;
   images: string[];
+  attendedTo?: boolean;
+  remarks?: string;
 }

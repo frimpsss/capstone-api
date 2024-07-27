@@ -11,6 +11,7 @@ import { router as NotificationRouter } from "./notifications/routes";
 import { router as TariffRouter } from "./tariffs/routes";
 import { router as BillRouter } from "./billing/routes";
 import { router as PaymentRouter } from "./payment/router";
+import { router as ReportRouter } from "./reports/_router";
 import mongoose from "mongoose";
 import { connectDB } from "./utils/dbCon";
 import { verifyToken } from "./middleware/verify.middleware";
@@ -37,6 +38,7 @@ app.use("/api/meter", verifyToken, MeterRouter);
 app.use("/api/notification", verifyToken, NotificationRouter);
 app.use("/api/tariff", TariffRouter);
 app.use("/api/bills", BillRouter);
+app.use("/api/reports", ReportRouter);
 app.use("/api/payments", PaymentRouter);
 
 app.all("/", (_req: Request, res: Response) => {

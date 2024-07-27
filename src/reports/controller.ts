@@ -15,7 +15,12 @@ export class ReportController {
     userId,
     description,
     images,
-  }: IReport): Promise<CustomResponse<any>> {
+  }: {
+    title: string;
+    userId: string;
+    description: string;
+    images: string[];
+  }): Promise<CustomResponse<any>> {
     try {
       createReportValidator.parse({
         title,
@@ -69,8 +74,105 @@ export class ReportController {
   /**
    * getAllReports
    */
-  public getAllReports() {
+  public async getAllReports(): Promise<CustomResponse<any>> {
     try {
-    } catch (error) {}
+      const reports = await ReportModel.find().populate({
+        path: "userId",
+      });
+      return new CustomResponse(
+        HttpStatusCode.Ok,
+        "All reports retrieved",
+        true,
+        reports
+      );
+    } catch (error: unknown | any) {
+      console.log(error);
+      if (error instanceof ZodError) {
+        return new CustomResponse(
+          HttpStatusCode.BadRequest,
+          "Validation error",
+          false,
+          error
+        );
+      }
+      if (error instanceof MongooseError) {
+        return new CustomResponse(
+          HttpStatusCode.BadRequest,
+          "Mongoose Error",
+          false,
+          error
+        );
+      }
+
+      return new CustomResponse(
+        HttpStatusCode.InternalServerError,
+        "An error occured",
+        false,
+        JSON.stringify(error)
+      );
+    }
+  }
+  /**
+   * getAllReports
+   */
+  public async attendToReport({
+    id,
+    remarks,
+  }: {
+    id: string;
+    remarks?: string;
+  }): Promise<CustomResponse<any>> {
+    try {
+      const report = await ReportModel.findById(id);
+      if (!report) {
+        return new CustomResponse(
+          HttpStatusCode.BadRequest,
+          "Request does not exist",
+          false
+        );
+      }
+      if (report.attendedTo) {
+        return new CustomResponse(
+          HttpStatusCode.BadRequest,
+          "Report has already been attended to",
+          false
+        );
+      }
+      await ReportModel.findOneAndUpdate(
+        { _id: report._id },
+        { attendedTo: true, remarks: remarks }
+      );
+      return new CustomResponse(
+        HttpStatusCode.Ok,
+        "All reports retrieved",
+        true,
+        report
+      );
+    } catch (error: unknown | any) {
+      console.log(error);
+      if (error instanceof ZodError) {
+        return new CustomResponse(
+          HttpStatusCode.BadRequest,
+          "Validation error",
+          false,
+          error
+        );
+      }
+      if (error instanceof MongooseError) {
+        return new CustomResponse(
+          HttpStatusCode.BadRequest,
+          "Mongoose Error",
+          false,
+          error
+        );
+      }
+
+      return new CustomResponse(
+        HttpStatusCode.InternalServerError,
+        "An error occured",
+        false,
+        JSON.stringify(error)
+      );
+    }
   }
 }

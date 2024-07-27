@@ -1,4 +1,4 @@
-import mongoose, { model, Schema, SchemaTypes } from "mongoose";
+import mongoose, { model, Schema, SchemaType, SchemaTypes } from "mongoose";
 import { IReport } from "./types";
 
 const ReportSchema = new Schema<IReport>(
@@ -19,6 +19,15 @@ const ReportSchema = new Schema<IReport>(
     images: {
       required: false,
       type: [SchemaTypes.String],
+    },
+    attendedTo: {
+      required: false,
+      type: SchemaTypes.Boolean,
+      default: false,
+    },
+    remarks: {
+      required: false,
+      type: SchemaTypes.String,
     },
   },
   { timestamps: true }

@@ -178,4 +178,56 @@ export class BillController {
       );
     }
   }
+
+  /**
+   * getAllBills
+   */
+  public async getAllBills(): Promise<CustomResponse<any>> {
+    try {
+      const bills = await BillModel.find()
+        .populate({
+          path: "meterId",
+          select: ["userId"],
+          populate: {
+            path: "userId",
+            select: ["name"],
+          },
+        })
+        .populate({
+          path: "tariffs.tariffId",
+          select: ["name"],
+        });
+      return new CustomResponse(
+        HttpStatusCode.Ok,
+        "Bills retreived succesfully",
+        true,
+        bills
+      );
+    } catch (error: unknown | any) {
+      console.log(error);
+      if (error instanceof ZodError) {
+        return new CustomResponse(
+          HttpStatusCode.BadRequest,
+          "Validation error",
+          false,
+          error
+        );
+      }
+      if (error instanceof MongooseError) {
+        return new CustomResponse(
+          HttpStatusCode.BadRequest,
+          "Mongoose Error",
+          false,
+          error
+        );
+      }
+
+      return new CustomResponse(
+        HttpStatusCode.InternalServerError,
+        "An error occured",
+        false,
+        JSON.stringify(error)
+      );
+    }
+  }
 }
