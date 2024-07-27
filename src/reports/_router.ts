@@ -31,7 +31,7 @@ router.post("/create", verifyToken, async (req: Request, res: Response) => {
   return;
 });
 
-router.patch("/attent-to", verifyToken, async (req: Request, res: Response) => {
+router.patch("/attend-to", verifyToken, async (req: Request, res: Response) => {
   if (req.body.role == ROLE.ADMIN || req.body.role == ROLE.SUPER_ADMIN) {
     const response = await Kontroller.attendToReport({
       id: req.body.reportId,
