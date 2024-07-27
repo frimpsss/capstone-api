@@ -41,7 +41,7 @@ export class BillController {
         new Date(billingPeriodEnd)
       )) as any;
 
-      const meters = await MeterModel.find();
+      const meters = await MeterModel.find({ userId: { $exists: true } });
       if (!meters) {
         return new CustomResponse(
           HttpStatusCode.Ok,
