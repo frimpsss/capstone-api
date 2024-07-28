@@ -11,11 +11,7 @@ import {
   getMonthlyTotalConsumtionSortedByMeterIds,
   monthNames,
 } from "../utils/helper";
-import {
-  billingMonthValidator,
-  createBillValidator,
-  returnFirstDateLastDate,
-} from "./utils";
+import { billingMonthValidator, returnFirstDateLastDate } from "./utils";
 import { BillStatus } from "./types";
 import { MeterModel } from "../meters/model";
 import { UserModel } from "../auth/model";

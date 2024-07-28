@@ -13,6 +13,7 @@ router.post("/create", async (_req: Request, _res: Response) => {
       title: _req.body.title,
       notifType: _req.body.type,
       recipientId: _req.body.recipientId,
+      sendPushNotif: _req.body.pushNotif,
     });
     _res.status(response.statusCode).send(response);
 

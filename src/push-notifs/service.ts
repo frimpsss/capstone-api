@@ -1,5 +1,7 @@
 import { FirebaseOptions, initializeApp } from "firebase/app";
 import { getDatabase, ref, set, get, child } from "firebase/database";
+import { Expo } from "expo-server-sdk";
+import { GlobalConfig } from "../utils/config";
 const firebaseConfig: FirebaseOptions = {
   apiKey: "AIzaSyCbnttnWzaQdJ78DyfTH8ibwZb4-AzQJVw",
   authDomain: "aquatrack-ecbd9.firebaseapp.com",
@@ -27,8 +29,7 @@ export async function saveToken(userId: string, token: string) {
     throw new Error("An error occured");
   }
 }
-import { Expo } from "expo-server-sdk";
-import { GlobalConfig } from "../utils/config";
+
 export const expo = new Expo({
   accessToken: GlobalConfig.EXPO_ACCESS_TOKEN,
   useFcmV1: true, 

@@ -5,8 +5,10 @@ import { NotificationType } from "./types";
 import { allNotifsPayloadSchema, newNotifSchema } from "./utils";
 import { MongooseError } from "mongoose";
 import { findAppUserByID } from "../auth/services";
-import { NotificationModel } from "./model"; 
+import { NotificationModel } from "./model";
+import { PostNotification } from "../push-notifs/controller";
 
+const Push = new PostNotification();
 export class NotificationController {
   /**
    * createNotification
@@ -16,11 +18,13 @@ export class NotificationController {
     message,
     notifType,
     recipientId,
+    sendPushNotif = false,
   }: {
     title: string;
     message: string;
     notifType: NotificationType;
     recipientId?: string;
+    sendPushNotif?: boolean;
   }): Promise<CustomResponse<any>> {
     try {
       newNotifSchema.parse({
@@ -50,7 +54,15 @@ export class NotificationController {
       });
 
       const saved = await _newNotif.save();
-
+      if (sendPushNotif && notifType == NotificationType.GENERAL) {
+        Push.sendToAllUsers(title, message)
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((er) => {
+            console.error(er);
+          });
+      }
       return new CustomResponse(
         HttpStatusCode.Ok,
         "Notification sent!🚀🚀",

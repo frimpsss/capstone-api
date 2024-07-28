@@ -76,4 +76,40 @@ export class PostNotification {
       );
     }
   }
+  /**
+   * sendToAllUsers
+   */
+  public async sendToAllUsers(
+    title: string,
+    body: string
+  ): Promise<CustomResponse<any>> {
+    try {
+      let user = await UserModel.find();
+
+      const tokens = user.map((e) => {
+        if (e.pushToken != undefined) {
+          return e.pushToken;
+        }
+      });
+      const messages: any[] = [];
+      tokens?.forEach((e) => {
+        if (e != undefined) {
+          messages.push({
+            to: e as string,
+            title,
+            body,
+          });
+        }
+      });
+      console.log(messages);
+      await expo.sendPushNotificationsAsync(messages);
+      return new CustomResponse(HttpStatusCode.Ok, "Sent", true);
+    } catch (error: any) {
+      return new CustomResponse(
+        HttpStatusCode.InternalServerError,
+        error?.message as string,
+        true
+      );
+    }
+  }
 }
