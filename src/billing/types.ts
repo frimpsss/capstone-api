@@ -8,7 +8,7 @@ export interface IBill extends Document {
   status: BillStatus;
   tariffs: IBillTariff[];
   paymentId: ObjectId;
-  // totalPaid: number;
+  totalConsumption: number;
 }
 export interface IBillTariff {
   tariffId: string;

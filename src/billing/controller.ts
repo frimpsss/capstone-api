@@ -80,6 +80,7 @@ export class BillController {
           totalAmountDue: amountDue,
           tariffs,
           status: BillStatus.UNPAID,
+          totalConsumption: MONTHLY_CONSUMPTION,
         });
 
         await newBill.save();
@@ -199,7 +200,8 @@ export class BillController {
         .populate({
           path: "tariffs.tariffId",
           select: ["name"],
-        });
+        })
+        .sort({ createdAt: "descending" });
       return new CustomResponse(
         HttpStatusCode.Ok,
         "Bills retreived succesfully",

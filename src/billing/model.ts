@@ -43,6 +43,10 @@ const BillSchema = new Schema<IBill>(
       default: null,
       required: false,
     },
+    totalConsumption: {
+      type: SchemaTypes.Number,
+      required: true,
+    },
   },
   { timestamps: true }
 );
