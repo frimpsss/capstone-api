@@ -87,7 +87,7 @@ export class BillController {
             billingPeriodStart,
             totalAmountDue: amountDue,
             tariffs,
-            status: BillStatus.UNPAID,
+            status: amountDue == 0 ? BillStatus.FULLYPAID : BillStatus.UNPAID,
             totalConsumption: MONTHLY_CONSUMPTION,
           });
 
