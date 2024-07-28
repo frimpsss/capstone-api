@@ -146,7 +146,7 @@ export class NotificationController {
           HttpStatusCode.BadRequest,
           "Mongoose Error",
           false,
-          error
+          JSON.stringify(error)
         );
       }
 

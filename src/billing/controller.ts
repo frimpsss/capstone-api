@@ -1,6 +1,6 @@
 import { HttpStatusCode } from "../utils/globalTypes";
 import CustomResponse from "../utils/wrapper";
-import { MongooseError } from "mongoose";
+import mongoose, { MongooseError } from "mongoose";
 import { ZodError } from "zod";
 import { TariffController } from "../tariffs/controller";
 import { ITariff } from "../tariffs/type";
@@ -28,12 +28,14 @@ export class BillController {
    * supposed to be automated but for demo sake making it an endpoint
    */
   public async generateBills(month: string): Promise<CustomResponse<any>> {
+    const session = await mongoose.startSession();
+
     try {
       // createBillValidator.parse({
       //   billingPeriodEnd: new Date(billingPeriodStart),
       //   billingPeriodStart: new Date(billingPeriodStart),
       // });
-
+      session.startTransaction();
       billingMonthValidator.parse(month);
 
       const { firstDate: billingPeriodStart, lastDate: billingPeriodEnd } =
@@ -55,7 +57,6 @@ export class BillController {
       const currentTarrifs =
         (await Tariffs.getActiveTariffs()) as CustomResponse<ITariff[]>;
 
-      console.log(currentTarrifs);
       const tariffs = currentTarrifs.data?.map((e) => {
         return {
           tariffId: e._id,
@@ -67,24 +68,33 @@ export class BillController {
       const billing_year = new Date(billingPeriodEnd).getFullYear();
 
       meters.map(async (meter: any) => {
-        let MONTHLY_CONSUMPTION = Number(consumptions?.[meter?._id]) || 0;
-        let amountDue = MONTHLY_CONSUMPTION * PRICE_PER_LITTER;
-        currentTarrifs.data?.map((e: ITariff, i) => {
-          amountDue += e.rate * 0.01 * MONTHLY_CONSUMPTION;
-        });
-
-        const newBill = new BillModel({
+        const existingBill = await BillModel.findOne({
           meterId: meter._id,
-          billingPeriodEnd,
           billingPeriodStart,
-          totalAmountDue: amountDue,
-          tariffs,
-          status: BillStatus.UNPAID,
-          totalConsumption: MONTHLY_CONSUMPTION,
+          billingPeriodEnd,
         });
 
-        await newBill.save();
+        if (!existingBill) {
+          let MONTHLY_CONSUMPTION = Number(consumptions?.[meter?._id]) || 0;
+          let amountDue = MONTHLY_CONSUMPTION * PRICE_PER_LITTER;
+          currentTarrifs.data?.map((e: ITariff, i) => {
+            amountDue += e.rate * 0.01 * MONTHLY_CONSUMPTION;
+          });
+
+          const newBill = new BillModel({
+            meterId: meter._id,
+            billingPeriodEnd,
+            billingPeriodStart,
+            totalAmountDue: amountDue,
+            tariffs,
+            status: BillStatus.UNPAID,
+            totalConsumption: MONTHLY_CONSUMPTION,
+          });
+
+          await newBill.save();
+        }
       });
+      await session.commitTransaction();
 
       await Notifs.createNotification({
         title: `Bill for ${monthNames[billing_month]} - ${billing_year}`,
@@ -97,6 +107,7 @@ export class BillController {
         true
       );
     } catch (error: unknown | any) {
+      await session.abortTransaction();
       console.log(error);
       if (error instanceof ZodError) {
         return new CustomResponse(
@@ -121,6 +132,8 @@ export class BillController {
         false,
         JSON.stringify(error)
       );
+    } finally {
+      session.endSession();
     }
   }
 
@@ -201,7 +214,7 @@ export class BillController {
           path: "tariffs.tariffId",
           select: ["name"],
         })
-        .sort({ createdAt: "descending" });
+        .sort({ createdAt: "ascending" });
       return new CustomResponse(
         HttpStatusCode.Ok,
         "Bills retreived succesfully",

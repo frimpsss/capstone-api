@@ -50,5 +50,8 @@ const BillSchema = new Schema<IBill>(
   },
   { timestamps: true }
 );
-
+BillSchema.index(
+  { meterId: 1, billingPeriodStart: 1, billingPeriodEnd: 1 },
+  { unique: true }
+);
 export const BillModel = mongoose.model<IBill>("Bill", BillSchema);
