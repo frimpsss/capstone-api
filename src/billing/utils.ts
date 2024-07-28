@@ -44,8 +44,8 @@ export function returnFirstDateLastDate(month: string): {
   if (m == -1) {
     throw new Error("invalid month");
   }
-  const firstDate = new Date(year, m - 1, 1);
-  const lastDate = new Date(year, m, 1).setDate(0);
+  const firstDate = new Date(year, m, 1);
+  const lastDate = new Date(year, m + 1, 1).setDate(0);
 
   return {
     firstDate,
