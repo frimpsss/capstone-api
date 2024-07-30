@@ -302,9 +302,10 @@ export class AdminAuthController {
       const txns = await PaymentModel.find().populate({
         path: "billId",
       });
+      console.log(txns)
       let all_txns = 0;
       txns.forEach((e: any) => {
-        all_txns += Number(e.billId.totalAmountDue);
+        all_txns += Number(e?.billId?.totalAmountDue) || 0;
       });
       const totalConsumption = await getAllTimeTotalConsumption();
       return new CustomResponse(HttpStatusCode.Ok, "Users retrieved", true, {
