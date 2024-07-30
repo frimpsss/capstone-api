@@ -69,3 +69,18 @@ router.get("/all-users", verifyToken, async (req: Request, res: Response) => {
       new CustomResponse(HttpStatusCode.Forbidden, "Cannot perform task", false)
     );
 });
+
+router.get("/stats", verifyToken, async (req: Request, res: Response) => {
+  if (req.body.role == ROLE.ADMIN || req.body.role == ROLE.SUPER_ADMIN) {
+    const response = await Controller.getStats();
+    res.status(response.statusCode).send(response);
+
+    return;
+  }
+
+  return res
+    .status(HttpStatusCode.Forbidden)
+    .send(
+      new CustomResponse(HttpStatusCode.Forbidden, "Cannot perform task", false)
+    );
+});

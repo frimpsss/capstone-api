@@ -50,3 +50,25 @@ export async function getMonthlyTotalConsumtionSortedByMeterIds(
     throw error;
   }
 }
+export async function getAllTimeTotalConsumption(): Promise<number | Error> {
+  try {
+    const snapshot = await get(child(dbRef, "readings"));
+    const data = snapshot.val();
+
+    if (!data) {
+      return 0;
+    }
+
+    let totalConsumption = 0;
+
+    Object.keys(data).forEach((meterId) => {
+      Object.values(data[meterId]).forEach((reading: any) => {
+        totalConsumption += Number(reading?.value) || 0;
+      });
+    });
+
+    return totalConsumption;
+  } catch (error) {
+    throw error;
+  }
+}

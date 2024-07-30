@@ -14,6 +14,9 @@ import { HttpStatusCode } from "../../utils/globalTypes";
 import { ZodError } from "zod";
 import { MongooseError } from "mongoose";
 import { castToObjectId } from "../../utils/config";
+import { MeterModel } from "../../meters/model";
+import { PaymentModel } from "../../payment/model";
+import { getAllTimeTotalConsumption } from "../../utils/helper";
 export class AdminAuthController {
   /**
    *
@@ -271,6 +274,43 @@ export class AdminAuthController {
         true,
         all_users
       );
+    } catch (error: unknown | any) {
+      console.log(error);
+
+      if (error instanceof MongooseError) {
+        return new CustomResponse(
+          HttpStatusCode.BadRequest,
+          "Mongoose Error",
+          false,
+          error
+        );
+      }
+
+      return new CustomResponse(
+        HttpStatusCode.InternalServerError,
+        undefined,
+        false,
+        Error(error?.message)
+      );
+    }
+  }
+
+  public async getStats(): Promise<CustomResponse<any>> {
+    try {
+      const all_users = await UserModel.find().countDocuments();
+      const all_meters = await MeterModel.find().countDocuments();
+      const txns = await PaymentModel.find().populate("meterId");
+      let all_txns = 0;
+      txns.forEach((e: any) => {
+        all_txns += Number(e.meterId.totalAmountDue);
+      });
+      const totalConsumption = await getAllTimeTotalConsumption();
+      return new CustomResponse(HttpStatusCode.Ok, "Users retrieved", true, {
+        all_users,
+        all_meters,
+        all_txns,
+        totalConsumption,
+      });
     } catch (error: unknown | any) {
       console.log(error);
 
