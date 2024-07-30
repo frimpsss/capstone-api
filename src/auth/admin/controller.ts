@@ -299,7 +299,9 @@ export class AdminAuthController {
     try {
       const all_users = await UserModel.find().countDocuments();
       const all_meters = await MeterModel.find().countDocuments();
-      const txns = await PaymentModel.find().populate("meterId");
+      const txns = await PaymentModel.find().populate({
+        path: "billId",
+      });
       let all_txns = 0;
       txns.forEach((e: any) => {
         all_txns += Number(e.meterId.totalAmountDue);
