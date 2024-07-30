@@ -304,7 +304,7 @@ export class AdminAuthController {
       });
       let all_txns = 0;
       txns.forEach((e: any) => {
-        all_txns += Number(e.meterId.totalAmountDue);
+        all_txns += Number(e.billId.totalAmountDue);
       });
       const totalConsumption = await getAllTimeTotalConsumption();
       return new CustomResponse(HttpStatusCode.Ok, "Users retrieved", true, {
