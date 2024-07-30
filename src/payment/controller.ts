@@ -120,6 +120,61 @@ export class PaymentController {
       );
     }
   }
+  /**
+   * getAllT
+   */
+  public async recentTxns(): Promise<CustomResponse<any>> {
+    try {
+      const startOfDay = new Date();
+      startOfDay.setHours(0, 0, 0, 0);
+
+      const endOfDay = new Date();
+      endOfDay.setHours(23, 59, 59, 999);
+
+      
+      const txn = await PaymentModel.find({
+        createdAt: { $gte: startOfDay, $lte: endOfDay },
+      })
+        .populate({
+          path: "billId",
+        })
+        .populate({
+          path: "userId",
+        });
+
+      return new CustomResponse(
+        HttpStatusCode.Ok,
+        "Transctions retieved",
+        true,
+        txn
+      );
+    } catch (error: unknown | any) {
+      console.log(error);
+      if (error instanceof ZodError) {
+        return new CustomResponse(
+          HttpStatusCode.BadRequest,
+          "Validation error",
+          false,
+          error
+        );
+      }
+      if (error instanceof MongooseError) {
+        return new CustomResponse(
+          HttpStatusCode.BadRequest,
+          "Mongoose Error",
+          false,
+          error
+        );
+      }
+
+      return new CustomResponse(
+        HttpStatusCode.InternalServerError,
+        "An error occured",
+        false,
+        JSON.stringify(error)
+      );
+    }
+  }
 
   /**
    * getAllT
